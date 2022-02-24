@@ -15,9 +15,14 @@ public class GameLoop : MonoBehaviour
     public List<Sprite> objectSprites;
     [SerializeField]
     private Image cpuSprite;
+    [SerializeField]
+    private List<Button> InputButtons;
 
     private int score;
     private int round;
+    private ObjectType playerObject;
+    private ObjectType cpuObject;
+    private Coroutine Timer;
 
 
     private void Start()
@@ -25,28 +30,37 @@ public class GameLoop : MonoBehaviour
         maxTime = 2f;
         score = 0;
         round = 1;
+        ToggleInputButtons(false);
         StartNewRound();
     }
 
     private void StartNewRound()
     {
-        // Select a random choice for cpu.
-        ObjectType cpuObject = (ObjectType)UnityEngine.Random.Range(1, Enum.GetValues(typeof(ObjectType)).Length);
+        // Update Score, Round & Timer UI.
+        InitializeRound();
 
-        // Update Score and Round UI.
-        uiManager.UpdateScoreUI(score);
-        uiManager.UpdateRoudnUI(round);
+        // Select a random choice for cpu.
+        cpuObject = (ObjectType)UnityEngine.Random.Range(1, Enum.GetValues(typeof(ObjectType)).Length);
 
         // Update Sprite according to CPU choice.
-        cpuSprite.sprite = objectSprites[(int)cpuObject-1];
+        cpuSprite.sprite = objectSprites[(int)cpuObject - 1];
         cpuSprite.preserveAspect = true;
 
         // Start a Timer for 2 sec.
-        var Timer = StartCoroutine(StartTimer());
+        Timer = StartCoroutine(StartTimer());
 
         // Enable Buttons for player.
+        ToggleInputButtons(true);
     }
 
+    private void InitializeRound()
+    {
+        uiManager.UpdateScoreUI(score);
+        uiManager.UpdateRoudnUI(round);
+        timerBar.fillAmount = 1f;
+    }
+
+    // Coroutine to Start Timer every Round.
     private IEnumerator StartTimer()
     {
         float timer = maxTime;
@@ -59,9 +73,28 @@ public class GameLoop : MonoBehaviour
         GameOver();
     }
 
+    // Game Over Logic.
     private void GameOver()
     {
         SceneManager.LoadScene(0);
+    }
+
+    // Enable & Disable Input Buttons.
+    private void ToggleInputButtons(bool isActive)
+    {
+        foreach(Button button in InputButtons)
+        {
+            button.enabled = isActive;
+        }
+    }
+
+    public void GetPlayerInput(int playerType)
+    {
+        playerObject = (ObjectType)playerType;
+        ToggleInputButtons(false);
+        StopCoroutine(Timer);
+        
+        // Check for the result.
     }
 
 }
