@@ -93,8 +93,24 @@ public class GameLoop : MonoBehaviour
         playerObject = (ObjectType)playerType;
         ToggleInputButtons(false);
         StopCoroutine(Timer);
-        
-        // Check for the result.
+
+        int result = EffectivenessMatrix.GetResult(playerObject, cpuObject);
+
+        switch(result)
+        {
+            case -1: GameOver();
+                break;
+            case 1: RoundWon();
+                break;
+            case 0: StartNewRound();
+                break;
+        }
     }
 
+    private void RoundWon()
+    {
+        round++;
+        score += 10;
+        StartNewRound();
+    }
 }
