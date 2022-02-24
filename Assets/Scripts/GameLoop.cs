@@ -76,6 +76,7 @@ public class GameLoop : MonoBehaviour
     // Game Over Logic.
     private void GameOver()
     {
+        SoundManager.Instance.PlaySoundEffects(SoundType.RoundLost);
         SceneManager.LoadScene(0);
     }
 
@@ -102,13 +103,15 @@ public class GameLoop : MonoBehaviour
                 break;
             case 1: RoundWon();
                 break;
-            case 0: StartNewRound();
+            case 0: SoundManager.Instance.PlaySoundEffects(SoundType.Draw); 
+                StartNewRound();
                 break;
         }
     }
 
     private void RoundWon()
     {
+        SoundManager.Instance.PlaySoundEffects(SoundType.RoundWon);
         round++;
         score += 10;
         CheckHighScore();
