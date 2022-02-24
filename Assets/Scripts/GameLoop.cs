@@ -111,6 +111,15 @@ public class GameLoop : MonoBehaviour
     {
         round++;
         score += 10;
+        CheckHighScore();
         StartNewRound();
+    }
+
+    private void CheckHighScore()
+    {
+        if(PlayerPrefs.GetInt("highScore", 0) < score)
+        {
+            PlayerPrefs.SetInt("highScore", score);
+        }
     }
 }

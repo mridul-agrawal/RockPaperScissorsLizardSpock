@@ -231,6 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playButton: {fileID: 552680561}
+  highScoreText: {fileID: 805610495}
 --- !u!4 &412696478
 Transform:
   m_ObjectHideFlags: 0
