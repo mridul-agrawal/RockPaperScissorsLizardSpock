@@ -17,7 +17,7 @@ public class SingletonGeneric<T> : MonoBehaviour where T : SingletonGeneric<T>
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }

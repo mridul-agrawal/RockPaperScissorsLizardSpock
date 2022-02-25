@@ -1,7 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class UIManager : SingletonGeneric<UIManager>
 {
@@ -9,6 +9,8 @@ public class UIManager : SingletonGeneric<UIManager>
     private TextMeshProUGUI scoreText;
     [SerializeField]
     private TextMeshProUGUI roundText;
+    [SerializeField]
+    private List<Button> InputButtons;
 
     internal void UpdateScoreUI(int score)
     {
@@ -18,5 +20,14 @@ public class UIManager : SingletonGeneric<UIManager>
     internal void UpdateRoudnUI(int round)
     {
         roundText.text = "ROUND: " + round.ToString();
+    }
+
+    // Enable & Disable Input Buttons.
+    public void ToggleInputButtons(bool isActive)
+    {
+        foreach (Button button in InputButtons)
+        {
+            button.enabled = isActive;
+        }
     }
 }

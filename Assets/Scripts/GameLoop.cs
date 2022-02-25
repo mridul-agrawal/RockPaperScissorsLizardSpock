@@ -13,23 +13,39 @@ public class GameLoop : MonoBehaviour
     public List<Sprite> objectSprites;
     [SerializeField]
     private Image cpuSprite;
-    [SerializeField]
-    private List<Button> InputButtons;
+    
 
     private int score;
     private int round;
-    private ObjectType playerObject;
     private ObjectType cpuObject;
     private Coroutine Timer;
 
 
+    private void Awake()
+    {
+        AssignListeners();
+    }
+
     private void Start()
     {
-        maxTime = 2f;
+        SetUpGame();
+        StartNewRound();
+    }
+
+    private void AssignListeners()
+    {
+        InputManager.OnInputSelection += HandlePlayerInput;
+        InputManager.RoundLost += GameOver;
+        InputManager.RoundWon += RoundWon;
+        InputManager.RoundDrawn += RoundDrawn;
+    }
+
+    private void SetUpGame()
+    {
+        maxTime = 10f;
         score = 0;
         round = 1;
-        ToggleInputButtons(false);
-        StartNewRound();
+        UIManager.Instance.ToggleInputButtons(false);
     }
 
     private void StartNewRound()
@@ -47,8 +63,8 @@ public class GameLoop : MonoBehaviour
         // Start a Timer for 2 sec.
         if (Timer == null) { Timer = StartCoroutine(StartTimer()); }
 
-        // Enable Buttons for player.
-        ToggleInputButtons(true);
+        // Enable Input Buttons for player.
+        UIManager.Instance.ToggleInputButtons(true);
     }
 
     private void InitializeRound()
@@ -62,7 +78,7 @@ public class GameLoop : MonoBehaviour
     private IEnumerator StartTimer()
     {
         float timer = maxTime;
-        while(timer>0)
+        while (timer > 0)
         {
             timer -= Time.deltaTime;
             timerBar.fillAmount = timer / maxTime;
@@ -78,35 +94,6 @@ public class GameLoop : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    // Enable & Disable Input Buttons.
-    private void ToggleInputButtons(bool isActive)
-    {
-        foreach(Button button in InputButtons)
-        {
-            button.enabled = isActive;
-        }
-    }
-
-    public void GetPlayerInput(int playerType)
-    {
-        playerObject = (ObjectType)playerType;
-        ToggleInputButtons(false);
-        if (Timer != null) { StopCoroutine(Timer); }
-
-        int result = EffectivenessMatrix.GetResult(playerObject, cpuObject);
-
-        switch(result)
-        {
-            case -1: GameOver();
-                break;
-            case 1: RoundWon();
-                break;
-            case 0: SoundManager.Instance.PlaySoundEffects(SoundType.Draw); 
-                StartNewRound();
-                break;
-        }
-    }
-
     private void RoundWon()
     {
         SoundManager.Instance.PlaySoundEffects(SoundType.RoundWon);
@@ -116,6 +103,22 @@ public class GameLoop : MonoBehaviour
         StartNewRound();
     }
 
+    private void RoundDrawn()
+    {
+        SoundManager.Instance.PlaySoundEffects(SoundType.Draw);
+        StartNewRound();
+    }
+
+    private void HandlePlayerInput(int playerType)
+    {
+        if (Timer != null) 
+        { 
+            StopCoroutine(Timer);
+            Timer = null;
+        }
+        InputManager.Instance.CalculateResult(playerType, cpuObject);
+    }
+
     private void CheckHighScore()
     {
         if(PlayerPrefs.GetInt("highScore", 0) < score)
@@ -123,4 +126,13 @@ public class GameLoop : MonoBehaviour
             PlayerPrefs.SetInt("highScore", score);
         }
     }
+
+    private void OnDisable()
+    {
+        InputManager.OnInputSelection -= HandlePlayerInput;
+        InputManager.RoundLost -= GameOver;
+        InputManager.RoundWon -= RoundWon;
+        InputManager.RoundDrawn -= RoundDrawn;
+    }
+
 }

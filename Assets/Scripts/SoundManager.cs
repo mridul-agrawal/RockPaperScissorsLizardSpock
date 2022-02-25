@@ -7,10 +7,11 @@ public class SoundManager : SingletonGeneric<SoundManager>
     public AudioSource audioMusic;
     public Sound[] AudioList;
 
+
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
     }
 
     public void PlaySoundEffects(SoundType soundType)
