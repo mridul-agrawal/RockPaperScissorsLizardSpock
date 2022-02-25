@@ -1,6 +1,9 @@
 using UnityEngine;
 using System;
 
+/// <summary>
+/// This class is a singleton which is used to Play SoundEffects in the game. This is a scalable class and we can add more SoundTypes if we want.
+/// </summary>
 public class SoundManager : SingletonGeneric<SoundManager>
 {
     public AudioSource audioEffects;

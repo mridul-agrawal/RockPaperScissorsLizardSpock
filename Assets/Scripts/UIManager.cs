@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
+/// <summary>
+/// This class is used to update UI Elements in the game like buttons and Text.
+/// </summary>
 public class UIManager : SingletonGeneric<UIManager>
 {
     [SerializeField]
@@ -12,17 +15,19 @@ public class UIManager : SingletonGeneric<UIManager>
     [SerializeField]
     private List<Button> InputButtons;
 
-    internal void UpdateScoreUI(int score)
+    // Updates the Score Text.
+    public void UpdateScoreUI(int score)
     {
         scoreText.text = "SCORE: " + score.ToString();
     }
 
-    internal void UpdateRoudnUI(int round)
+    // Updates the Round number text. 
+    public void UpdateRoundUI(int round)
     {
         roundText.text = "ROUND: " + round.ToString();
     }
 
-    // Enable & Disable Input Buttons.
+    // Enable & Disable Input Buttons for Player.
     public void ToggleInputButtons(bool isActive)
     {
         foreach (Button button in InputButtons)

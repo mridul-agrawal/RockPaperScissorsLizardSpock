@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+/// <summary>
+/// This class is used to Display HighScore and Handle UI Input on MainMenu Screen.
+/// </summary>
 public class LobbyManager : MonoBehaviour
 {
     [SerializeField]

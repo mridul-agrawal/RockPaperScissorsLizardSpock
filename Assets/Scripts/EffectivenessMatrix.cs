@@ -1,3 +1,6 @@
+/// <summary>
+/// This Class is used to determine which object is more effective on which object using a 2D Array. 
+/// </summary>
 public class EffectivenessMatrix 
 {
     static int[][] matrix =
@@ -11,6 +14,7 @@ public class EffectivenessMatrix
         /*Spock*/    new int[] {1,    -1,     1,    -1,     0 },
     };
 
+    // A method which takes 2 ObjectTypes and returns the result as an integer using the effectiveness matrix.
     public static int GetResult(ObjectType playerType, ObjectType cpuType)
     {
         int row = (int)playerType - 1;
