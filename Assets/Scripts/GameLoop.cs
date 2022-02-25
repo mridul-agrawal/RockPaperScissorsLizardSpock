@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 public class GameLoop : MonoBehaviour
 {
     [SerializeField]
-    private UIManager uiManager;
-    [SerializeField]
     private Image timerBar;
     public float maxTime;
     public List<Sprite> objectSprites;
@@ -47,7 +45,7 @@ public class GameLoop : MonoBehaviour
         cpuSprite.preserveAspect = true;
 
         // Start a Timer for 2 sec.
-        Timer = StartCoroutine(StartTimer());
+        if (Timer == null) { Timer = StartCoroutine(StartTimer()); }
 
         // Enable Buttons for player.
         ToggleInputButtons(true);
@@ -55,8 +53,8 @@ public class GameLoop : MonoBehaviour
 
     private void InitializeRound()
     {
-        uiManager.UpdateScoreUI(score);
-        uiManager.UpdateRoudnUI(round);
+        UIManager.Instance.UpdateScoreUI(score);
+        UIManager.Instance.UpdateRoudnUI(round);
         timerBar.fillAmount = 1f;
     }
 
@@ -93,7 +91,7 @@ public class GameLoop : MonoBehaviour
     {
         playerObject = (ObjectType)playerType;
         ToggleInputButtons(false);
-        StopCoroutine(Timer);
+        if (Timer != null) { StopCoroutine(Timer); }
 
         int result = EffectivenessMatrix.GetResult(playerObject, cpuObject);
 

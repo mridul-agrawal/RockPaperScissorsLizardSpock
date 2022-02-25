@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SingletonGeneric<T> : MonoBehaviour where T : SingletonGeneric<T>
 {
-    public static T instance;
+    private static T instance;
     public static T Instance { get { return instance; } }
 
     protected virtual void Awake()

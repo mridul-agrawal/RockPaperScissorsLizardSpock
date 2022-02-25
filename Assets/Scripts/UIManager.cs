@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class UIManager : MonoBehaviour
+public class UIManager : SingletonGeneric<UIManager>
 {
     [SerializeField]
     private TextMeshProUGUI scoreText;
